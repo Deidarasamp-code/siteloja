@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detalhe do Look</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+    }
+    img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border: none;
+      font-size: 1em;
+    }
+    .button {
+      background-color: #4caf50;
+      border: none;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      width: 100%;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .button:hover {
+      background-color: #45a049;
+    }
+    .comentarios {
+      background: #222;
+      padding: 10px;
+      margin-top: 20px;
+      border-radius: 8px;
+    }
+    .comentarios p {
+      border-bottom: 1px solid #444;
+      padding: 6px 0;
+    }
+    .like {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #e74c3c;
+      cursor: pointer;
+    }
+    .like.liked {
+      color: #27ae60;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      color: #4caf50;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 id="tituloLook"></h2>
+    <img id="imagemLook" src="" alt="Imagem do Look" />
+    <p id="descricaoLook"></p>
+
+    <div>
+      <span id="curtidas" class="like" onclick="curtir()">❤️ 0</span>
+    </div>
+
+    <input type="text" id="nomeUsuario" placeholder="Seu nome" />
+    <textarea id="comentarioInput" rows="3" placeholder="Deixe seu comentário..."></textarea>
+    <button onclick="enviarComentario()" class="button">Enviar comentário</button>
+
+    <div class="comentarios" id="listaComentarios">
+      <!-- Comentários aqui -->
+    </div>
+
+    <a href="#" onclick="history.back()">← Voltar para o Lookbook</a>
+  </div>
+
+  <script>
+    const looks = [
+      {
+        titulo: 'Look Urbano 1',
+        imagem: 'EUDECOSTA.jpg',
+        descricao: 'Visual streetwear com jaqueta oversized e tênis estilosos.'
+      },
+      {
+        titulo: 'Look Urbano 2',
+        imagem: 'https://images.unsplash.com/photo-1503342452485-86f8a6b1d3e9',
+        descricao: 'Look casual com moletom confortável e calça jogger.'
+      },
+      {
+        titulo: 'Look Urbano 3',
+        imagem: 'https://images.unsplash.com/photo-1520975693122-4230a212c54e',
+        descricao: 'Combinação de cores escuras com acessórios minimalistas.'
+      }
+    ];
+
+    const params = new URLSearchParams(location.search);
+    const id = parseInt(params.get("id") || 0);
+    const look = looks[id];
+    let curtidas = JSON.parse(localStorage.getItem('curtidasLookDetalhado')) || {};
+    let curtido = JSON.parse(localStorage.getItem('estadoCurtidaDetalhado')) || {};
+    let comentarios = JSON.parse(localStorage.getItem(`comentariosLook_${id}`)) || [];
+
+    document.getElementById('tituloLook').textContent = look.titulo;
+    document.getElementById('imagemLook').src = look.imagem;
+    document.getElementById('descricaoLook').textContent = look.descricao;
+
+    const curtidasEl = document.getElementById('curtidas');
+    atualizarCurtida();
+    carregarComentarios();
+
+    function curtir() {
+      curtidas[id] = (curtidas[id] || 0) + (curtido[id] ? -1 : 1);
+      curtido[id] = !curtido[id];
+      localStorage.setItem('curtidasLookDetalhado', JSON.stringify(curtidas));
+      localStorage.setItem('estadoCurtidaDetalhado', JSON.stringify(curtido));
+      atualizarCurtida();
+    }
+
+    function atualizarCurtida() {
+      curtidasEl.textContent = `❤️ ${curtidas[id] || 0}`;
+      curtidasEl.classList.toggle('liked', curtido[id]);
+    }
+
+    function enviarComentario() {
+      const nome = document.getElementById('nomeUsuario').value.trim();
+      const texto = document.getElementById('comentarioInput').value.trim();
+      if (!nome || !texto) return alert('Preencha nome e comentário!');
+      localStorage.setItem('nomeLookbook', nome);
+      comentarios.push({ nome, texto });
+      localStorage.setItem(`comentariosLook_${id}`, JSON.stringify(comentarios));
+      document.getElementById('comentarioInput').value = '';
+      carregarComentarios();
+    }
+
+    function carregarComentarios() {
+      const container = document.getElementById('listaComentarios');
+      container.innerHTML = '';
+      const nomeSalvo = localStorage.getItem('nomeLookbook');
+      if (nomeSalvo) document.getElementById('nomeUsuario').value = nomeSalvo;
+      if (comentarios.length === 0) {
+        container.innerHTML = '<p>Nenhum comentário ainda.</p>';
+        return;
+      }
+      comentarios.forEach(c => {
+        const p = document.createElement('p');
+        p.innerHTML = `<strong>${c.nome}:</strong> ${c.texto}`;
+        container.appendChild(p);
+      });
+    }
+  </script>
+</body>
+</html>

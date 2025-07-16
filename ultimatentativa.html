@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  
+  <meta charset="UTF-8">
+
+ <script>
+  
+  const user = JSON.parse(localStorage.getItem('usuarioLogadoARKAZ'));
+  if (!user) {
+    window.location.href = 'login.html';
+  }
+
+
+  
+  function logout() {
+    localStorage.removeItem('usuarioLogadoARKAZ');
+    window.location.href = 'login.html';
+  }
+</script>
+
+
+<script>
+  const usuario = JSON.parse(localStorage.getItem('usuarioLogadoARKAZ'));
+  if (usuario) {
+    document.getElementById('nomeUserTopo').textContent = usuario.nome;
+  }
+
+  function logout() {
+    localStorage.removeItem('usuarioLogadoARKAZ');
+    window.location.href = 'login.html';
+  }
+</script>
+
+
+ <link rel="shortcut icon" href="favlogo.png" type="image/png">   <!-- FAVICON -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARKAZ - Streetwear</title>
+  <style>
+nav button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+
+
+
+nav button:hover {
+  text-decoration: underline;
+}
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #111;
+      color: white;
+    }
+
+    header {
+      background-color: #000;
+      padding: 20px;
+      text-align: center;
+      font-size: 2em;
+      font-weight: bold;
+    }
+
+    nav {
+      background-color: #222;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 15px 0;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.1em;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .banner {
+      background: url('https://images.unsplash.com/photo-1521337581100-8ca9a73a5f0e') no-repeat center/cover;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .banner h2 {
+      font-size: 2.5em;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .section {
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      background-color: #222;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .product-card img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .product-card h3 {
+      margin: 10px 0 5px;
+    }
+
+    .button {
+      margin-top: 10px;
+      padding: 10px;
+      background: #4caf50;
+      border: none;
+      color: white;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .button:hover {
+      background: #45a049;
+    }
+ footer {
+      background-color: #000;
+      text-align: center;
+      padding: 20px;
+      color: #aaa;
+      font-size: 0.9em;
+   
+     }
+ 
+
+header img {
+  height: 60px;
+}
+.mini-products .product-card {
+  padding: 10px;
+  font-size: 0.9em;
+}
+
+.mini-products .product-card img {
+  height: 160px;
+  object-fit: cover;
+}
+
+/* Grid mais estreito só para a home */
+
+
+.home-intro {
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+}
+.home-grid {
+  max-width: 600px;
+  margin: 40px auto 0;
+}
+/* Grid mais estreito só para a home */
+
+.lookbook-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.look-card {
+  
+  background-color: #222;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.look-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+}
+
+.look-card img {
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+  height: 200px;
+  margin-bottom: 10px;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.actions button {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.actions button:hover {
+  color: #c0392b;
+}
+
+
+.carrinho-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 100%;
+  background: #222;
+  color: white;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.6);
+  z-index: 9999;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.carrinho-conteudo h2 {
+  text-align: center;
+}
+
+.fechar-carrinho {
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: white;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  cursor: pointer;
+}
+</style>
+
+  </style>
+</head>
+<body>
+
+<div style="background:#222; text-align:center; padding:10px;">
+  👋 Olá, <strong id="nomeUserTopo"></strong>! 
+  <button onclick="logout()" style="margin-left:10px; background:#e74c3c; color:white; border:none; border-radius:6px; padding:5px 10px; cursor:pointer;">Sair</button>
+</div>
+
+ <header>
+  
+  <img src="logoadobe1.png" alt="ARKAZ Logo" style="height: 40px;">
+<h1 style="position:absolute; left:-9999px;">ARKAZ Streetwear</h1> <!-- oculto para não quebrar layout -->
+
+</header>
+ <button onclick="abrirCarrinho()" style="position:fixed;bottom:20px;right:20px;background:#4caf50;color:white;padding:10px 15px;border:none;border-radius:50%;">🛒</button>
+
+
+<div id="carrinho-modal" class="carrinho-modal">
+  <div class="carrinho-conteudo">
+    <button class="fechar-carrinho" onclick="fecharCarrinho()">×</button>
+    <h2>🛒 Seu Carrinho</h2>
+    <div id="lista-carrinho"></div>
+    <p style="margin-top:15px;">Total: R$ <span id="total-carrinho">0.00</span></p>
+    <a href="checkout.html" class="button" style="margin-top:10px;">Finalizar Compra</a>
+  </div>
+</div>
+
+
+ <nav>
+  <button onclick="mostrarSecao('home')">Home</button>
+  <button onclick="mostrarSecao('produtos')">Produtos</button>
+ <button onclick="mostrarSecao('lookbook')">Lookbook</button>
+  <button onclick="mostrarSecao('contato')">Contatos</button>
+  <button onclick="window.location.href='checkout.html'">Finalizar Compra</button>
+
+</nav>
+
+<main>
+   <!-- home -->
+  <section id="home" class="section" style="display: none;">
+  <div class="home-intro">
+    <h2>Bem-vindo à ARKAZ</h2>
+            <p>Conheça nossas roupas com estilo urbano e atitude.</p>
+  </div>
+
+  <div class="home-grid">
+    <h3 style="margin-top: 40px;">&#128293; Mais Vendidos</h3>
+    <div class="products mini-products">
+      <div class="product-card">
+        <img src="EUDECOSTA.jpg" alt="Moletom Vaidade">
+        <h3>Moletom Vaidade</h3>
+        <p>R$ 149,90</p>
+      <a href="produto.html?nome=Moletom%20Vaidade&preco=149.90&imagem=https://link-da-imagem.webp" class="button">Ver Produto</a>
+
+      </div>
+      <div class="product-card">
+        <img src="https://down-br.img.susercontent.com/file/br-11134207-7r98o-lt5qbbp7qwy70b.webp" alt="Calça Jogger Caqui">
+        <h3>Moletom But Love</h3>
+        <p>R$ 139,90</p>
+        <a href="produto.html?nome=Moletom%20But%20Love&preco=139.90&imagem=https://link-da-imagem.webp" class="button">Ver Produto</a>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="produtos" class="section">
+
+    <h2>Produtos em Destaque  <p style="color: blue;"> (IMAGENS BASE PRA TESTES)</p>  </h2>
+    <div class="products">
+      <div class="product-card">
+       
+        <img src="EUDECOSTA.jpg" alt="Moletom Vaidade">
+        <h3>Moletom Vaidade</h3>
+        <p>R$ 149,90</p>
+       <button class="button" onclick="adicionarAoCarrinho('Moletom Vaidade', 149.90)">Adicionar ao Carrinho</button>
+
+      </div>
+      <div class="product-card">
+        <img src="https://down-br.img.susercontent.com/file/br-11134207-7r98o-lt5qbbp7qwy70b.webp" alt="Moletom But Love">
+        <h3>Moletom But Love</h3>
+        <p>R$ 139,90</p>
+     <button class="button" onclick="adicionarAoCarrinho('Moletom But Love', 139.90)">Adicionar ao Carrinho</button>
+
+
+
+
+      </div>
+      <div class="product-card">
+        <img src="https://down-br.img.susercontent.com/file/br-11134207-7r98o-m8zqk0yg32gpb3.web" alt="Destroyed">
+
+        <h3>Calça Jeans Destroyed</h3>
+        <p>R$ 179,90</p>
+  <button class="button" onclick="adicionarAoCarrinho('Calça Cargo Destroyed', 179.90)">Adicionar ao Carrinho</button>
+
+
+
+
+      </div>
+     
+</main>
+
+<!-- FAVICON -->
+
+<section id="lookbook" class="section" style="display: none;">
+  <h2 style="text-align:center; margin-bottom: 30px;">Lookbook</h2>
+  <div class="lookbook-grid">
+    <div class="look-card">
+      <img src="EUDECOSTA.jpg" alt="Look Urbano 1">
+      <h3>Look Urbano 1</h3>
+      <div class="actions">
+      <button class="like-btn" data-index="0" onclick="curtirLook(this)">❤️</button>
+        <button class="comment-btn" onclick="abrirModal(0)">💬 5</button>
+      </div>
+      <a href="look.html?id=0" class="button">Ver Look</a>
+      <button onclick="comprarLookCompleto(0)" class="button">Comprar Look</button>
+
+    </div>
+    <div class="look-card">
+      <p class="like-count">❤️ <span id="curtidas-0">0</span> curtidas</p>
+      <img src="https://images.unsplash.com/photo-1503342452485-86f8a6b1d3e9" alt="Look Urbano 2">
+      <h3>Look Urbano 2</h3>
+      <div class="actions">
+      <button class="like-btn" data-index="2" onclick="curtirLook(this)">❤️</button>
+        <button class="comment-btn" onclick="abrirModal(1)">💬 3</button>
+      </div>
+      <a href="look.html?id=1" class="button">Ver Look</a>
+      <button onclick="comprarLookCompleto(0)" class="button">Comprar Look</button>
+
+    </div>
+    <div class="look-card">
+      
+      <img src="https://images.unsplash.com/photo-1520975693122-4230a212c54e" alt="Look Urbano 3">
+      <h3>Look Urbano 3</h3>
+      <div class="actions">
+        <button class="like-btn" data-index="1" onclick="curtirLook(this)">❤️</button>
+        <button class="comment-btn" onclick="abrirModal(2)">💬 8</button>
+      </div>
+     <a href="look.html?id=2" class="button">Ver Look</a>
+
+     <button onclick="comprarLookCompleto(0)" class="button">Comprar Look</button>
+
+    </div>
+  </div>
+</section>
+
+<!-- Modal para exibir detalhes do look -->
+<div id="modalLook" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+  background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:1000;">
+  <div style="background:#222; padding:20px; border-radius:10px; max-width:600px; width:90%; color:white; position:relative;">
+    <button onclick="fecharModal()" style="position:absolute; top:10px; right:15px; background:none; border:none; color:#aaa; font-size:1.5em; cursor:pointer;">×</button>
+    <img id="modalImg" src="" alt="Look Detalhe" style="width:100%; border-radius:10px; margin-bottom: 15px;">
+    <h3 id="modalTitulo"></h3>
+    <p id="modalDescricao">Descrição do look vai aqui. Em breve poderá conter comentários e mais infos.</p>
+   <input id="nomeUsuario" type="text" placeholder="Seu nome" style="width:100%; margin-bottom:10px; border-radius:6px; padding:8px;" />
+<textarea id="comentarioInput" rows="3" placeholder="Deixe seu comentário..." style="width:100%; margin-top:8px; border-radius:6px; padding:8px;"></textarea>
+<button onclick="enviarComentario()" class="button" style="margin-top:8px; width:100%;">Enviar comentário</button>
+
+
+<div id="listaComentarios" style="margin-top:15px; max-height:150px; overflow-y:auto; background:#333; padding:10px; border-radius:8px; color:#eee;">
+  <!-- Comentários aparecerão aqui -->
+</div>
+
+
+    
+  </div>
+</div>
+
+    </div>
+  </div>
+</section>
+
+
+<section id="contato" class="section" style="display: none;">
+  <h2>Contatos</h2>
+  <p>Email: contato@arkaz.com.br<br>Instagram: @arkaz.street</p>
+</section>
+
+
+
+<footer>
+  &copy; 2025 ARKAZ Streetwear. Todos os direitos reservados.
+</footer>
+
+
+
+ 
+
+
+<script>
+  const carrinho = [];
+  const salvo = localStorage.getItem('carrinho');
+if (salvo) {
+  carrinho.push(...JSON.parse(salvo));
+  atualizarCarrinho();
+}
+
+ function adicionarAoCarrinho(nome, preco) {
+  carrinho.push({ nome, preco });
+  localStorage.setItem('carrinho', JSON.stringify(carrinho));
+  atualizarCarrinho();
+  document.getElementById('carrinho').style.display = 'block';
+}
+
+  function atualizarCarrinho() {
+    const lista = document.getElementById('lista-carrinho');
+    const total = document.getElementById('total-carrinho');
+    lista.innerHTML = '';
+    let soma = 0;
+    
+    carrinho.forEach((item, index) => {
+      const li = document.createElement('li');
+      li.innerHTML = `${item.nome} - R$ ${item.preco.toFixed(2)} 
+        <button onclick="removerItem(${index})" style="margin-left:10px;">❌</button>`;
+      lista.appendChild(li);
+      soma += item.preco;
+    });
+
+    total.innerText = soma.toFixed(2);
+  }
+
+ function removerItem(index) {
+  carrinho.splice(index, 1);
+  localStorage.setItem('carrinho', JSON.stringify(carrinho));
+  atualizarCarrinho();
+  if (carrinho.length === 0) {
+    fecharCarrinho();
+  }
+}
+
+</script>
+
+<script>
+  function mostrarSecao(secaoId) {
+    const secoes = document.querySelectorAll('.section');
+    secoes.forEach(secao => {
+      secao.style.display = 'none';
+    });
+
+    document.getElementById(secaoId).style.display = 'block';
+
+    // Rolagem para o topo ao trocar de aba
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Exibir seção Home por padrão ao carregar
+  document.addEventListener('DOMContentLoaded', () => {
+    mostrarSecao('home');
+  });
+
+  
+
+// ---- LOOKBOOK: Curtidas + Comentários + Modal ----
+
+// Dados dos looks (use os mesmos índices dos botões)
+const looks = [
+  {
+    titulo: 'Look Urbano 1',
+    imagem: 'https://images.unsplash.com/photo-1521337581100-8ca9a73a5f0e',
+    descricao: 'Visual streetwear com jaqueta oversized e tênis estilosos.'
+  },
+  {
+    titulo: 'Look Urbano 2',
+    imagem: 'https://images.unsplash.com/photo-1503342452485-86f8a6b1d3e9',
+    descricao: 'Look casual com moletom confortável e calça jogger.'
+  },
+  {
+    titulo: 'Look Urbano 3',
+    imagem: 'https://images.unsplash.com/photo-1520975693122-4230a212c54e',
+    descricao: 'Combinação de cores escuras com acessórios minimalistas.'
+  }
+];
+
+// Estado
+let lookAtual = null;
+let curtidas = JSON.parse(localStorage.getItem('curtidasLookbook')) || {};
+let estadoCurtida = JSON.parse(localStorage.getItem('estadoCurtidaLookbook')) || {};
+
+// Função: abrir modal
+function abrirModal(index) {
+  lookAtual = index;
+  const modal = document.getElementById('modalLook');
+  document.getElementById('modalImg').src = looks[index].imagem;
+  document.getElementById('modalTitulo').textContent = looks[index].titulo;
+  document.getElementById('modalDescricao').textContent = looks[index].descricao;
+  document.getElementById('comentarioInput').value = '';
+  modal.style.display = 'flex';
+  carregarComentarios();
+}
+
+// Função: fechar modal
+function fecharModal() {
+  document.getElementById('modalLook').style.display = 'none';
+}
+
+// Função: enviar comentário
+function enviarComentario() {
+  const nome = document.getElementById('nomeUsuario').value.trim();
+  const texto = document.getElementById('comentarioInput').value.trim();
+
+  if (!nome || !texto) {
+    alert('Digite seu nome e comentário.');
+    return;
+  }
+
+  // Salva o nome para uso futuro
+  localStorage.setItem('nomeLookbook', nome);
+
+  const novoComentario = {
+    nome: nome,
+    texto: texto
+  };
+
+  // Recupera os comentários anteriores
+  let comentarios = JSON.parse(localStorage.getItem(`comentariosLook_${lookAtual}`)) || [];
+
+  // Adiciona novo comentário
+  comentarios.push(novoComentario);
+
+  // Salva de volta
+  localStorage.setItem(`comentariosLook_${lookAtual}`, JSON.stringify(comentarios));
+
+  // Limpa o campo e atualiza lista
+  document.getElementById('comentarioInput').value = '';
+  carregarComentarios();
+}
+
+
+// Função: carregar comentários
+function carregarComentarios() {
+  const container = document.getElementById('listaComentarios');
+  const comentarios = JSON.parse(localStorage.getItem(`comentariosLook_${lookAtual}`)) || [];
+  container.innerHTML = '';
+
+  // Preencher nome salvo no campo automaticamente
+  const nomeSalvo = localStorage.getItem('nomeLookbook');
+  if (nomeSalvo) {
+    document.getElementById('nomeUsuario').value = nomeSalvo;
+  }
+
+  if (comentarios.length === 0) {
+    container.innerHTML = '<p>Nenhum comentário ainda.</p>';
+    return;
+  }
+
+  comentarios.forEach(c => {
+    const p = document.createElement('p');
+    const nomeExibido = c.nome || 'Anônimo';
+    p.innerHTML = `<strong>${nomeExibido}:</strong> ${c.texto}`;
+    container.appendChild(p);
+  });
+}
+
+
+
+// Função: curtir / descurtir
+function curtirLook(botao) {
+  const index = botao.dataset.index;
+  if (estadoCurtida[index]) {
+    // descurtir
+    curtidas[index] = (curtidas[index] || 1) - 1;
+    estadoCurtida[index] = false;
+  } else {
+    // curtir
+    curtidas[index] = (curtidas[index] || 0) + 1;
+    estadoCurtida[index] = true;
+  }
+  localStorage.setItem('curtidasLookbook', JSON.stringify(curtidas));
+  localStorage.setItem('estadoCurtidaLookbook', JSON.stringify(estadoCurtida));
+  atualizarCurtidasBotoes();
+}
+
+// Atualiza todos os botões com valores salvos
+function atualizarCurtidasBotoes() {
+  document.querySelectorAll('.like-btn').forEach(botao => {
+    const index = botao.dataset.index;
+    botao.textContent = '❤️ ' + (curtidas[index] || 0);
+    botao.style.color = estadoCurtida[index] ? '#27ae60' : '#e74c3c';
+  });
+}
+
+// Inicializa curtidas
+document.addEventListener('DOMContentLoaded', atualizarCurtidasBotoes);
+
+// Define os itens de cada look
+const looksComItens = [
+  [
+    { nome: 'Calça Cargo Preta', preco: 149.90 },
+    { nome: 'Moletom Vaidade', preco: 149.90 }
+  ],
+  [
+    { nome: 'Calça Jogger Caqui', preco: 139.90 },
+    { nome: 'Moletom But Love', preco: 139.90 }
+  ],
+  [
+    { nome: 'Calça Jeans Destroyed', preco: 179.90 },
+    { nome: 'Tênis Preto Street', preco: 219.90 }
+  ]
+];
+
+// Função para adicionar todos os itens do look ao carrinho
+function comprarLookCompleto(index) {
+  const itens = looksComItens[index];
+  itens.forEach(item => {
+    carrinho.push({ nome: item.nome, preco: item.preco });
+  });
+  localStorage.setItem('carrinho', JSON.stringify(carrinho));
+  atualizarCarrinho();
+  document.getElementById('carrinho').style.display = 'block';
+}
+
+function atualizarCarrinho() {
+  const lista = document.getElementById('lista-carrinho');
+  const total = document.getElementById('total-carrinho');
+  lista.innerHTML = '';
+  let soma = 0;
+
+  carrinho.forEach((item, index) => {
+    const div = document.createElement('div');
+    div.innerHTML = `
+      <p><strong>${item.nome}</strong> - R$ ${item.preco.toFixed(2)} 
+      <button onclick="removerItem(${index})" style="margin-left:10px;">❌</button></p>
+    `;
+    lista.appendChild(div);
+    soma += item.preco;
+  });
+
+  total.innerText = soma.toFixed(2);
+}
+
+function abrirCarrinho() {
+  document.getElementById('carrinho-modal').style.display = 'block';
+}
+
+function fecharCarrinho() {
+  document.getElementById('carrinho-modal').style.display = 'none';
+}
+
+</script>
+
+<!-- BOTÃO FLUTUANTE WHATSAPP -->
+<a href="https://wa.me/554796158023?text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20os%20produtos%20ARKAZ" 
+   target="_blank" 
+   style="
+     position:fixed;
+     bottom:90px;
+     right:20px;
+     background:#25d366;
+     color:white;
+     padding:12px 14px;
+     border-radius:50%;
+     font-size:22px;
+     text-align:center;
+     z-index:999;
+     box-shadow: 0 0 10px rgba(0,0,0,0.4);
+     text-decoration: none;">
+  💬
+</a>
+
+
+</body>
+</html>
+

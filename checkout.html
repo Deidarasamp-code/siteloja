@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Finalizar Pedido - ARKAZ</title>
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 6px;
+    }
+
+    input {
+      background: #222;
+      color: white;
+    }
+
+    button {
+      background: #4caf50;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    .resumo {
+      background: #222;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .cupom-ok {
+      color: #4caf50;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Finalizar Pedido</h1>
+
+  <div class="resumo">
+    <h3>🛒 Itens do Carrinho:</h3>
+    <ul id="listaCheckout"></ul>
+    <p>Total: R$ <span id="totalCheckout">0.00</span></p>
+  </div>
+
+  <input type="text" id="nomeCliente" placeholder="Seu nome">
+  <input type="email" id="emailCliente" placeholder="Seu e-mail">
+  <input type="text" id="cupom" placeholder="Cupom de desconto (ex: REZKA10)">
+  <button onclick="confirmarPedido()">Confirmar Pedido</button>
+
+  <script>
+ 
+  const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+  let total = 0;
+  const lista = document.getElementById('listaCheckout');
+  const totalSpan = document.getElementById('totalCheckout');
+
+  carrinho.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = `${item.nome} - R$ ${item.preco.toFixed(2)}`;
+    lista.appendChild(li);
+    total += item.preco;
+  });
+
+  totalSpan.textContent = total.toFixed(2);
+
+  function confirmarPedido() {
+    const nome = document.getElementById('nomeCliente').value.trim();
+    const email = document.getElementById('emailCliente').value.trim();
+    const cupom = document.getElementById('cupom').value.trim().toUpperCase();
+
+    if (!nome || !email) {
+      alert('Preencha seu nome e e-mail para finalizar.');
+      return;
+    }
+
+    let desconto = 0;
+    let totalFinal = total;
+
+    if (cupom === 'REZKA10') {
+      desconto = total * 0.10;
+      totalFinal = total - desconto;
+      alert('Cupom aplicado com sucesso! Desconto de 10% aplicado.');
+    }
+
+    // Monta a mensagem
+    let mensagem = `📦 *Novo Pedido na ARKAZ*\n\n👤 *Nome:* ${nome}\n📧 *Email:* ${email}\n\n🛒 *Itens:*`;
+    carrinho.forEach(item => {
+      mensagem += `\n- ${item.nome} (R$ ${item.preco.toFixed(2)})`;
+    });
+    mensagem += `\n\n💰 *Total:* R$ ${totalFinal.toFixed(2)}`;
+    if (cupom === 'REZKA10') {
+      mensagem += `\n🎁 *Cupom aplicado:* ${cupom}`;
+    }
+
+    // Número do seu WhatsApp aqui (sem + ou traços)
+    const numero = '554796158023'; // Troque pelo seu número com DDD
+
+    // Codifica e abre o WhatsApp
+    const link = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+    window.open(link, '_blank');
+
+    // Limpa carrinho e redireciona
+    localStorage.removeItem('carrinho');
+    setTimeout(() => window.location.href = 'ultimatentativa.html', 500);
+  }
+</script>
+
+</body>
+</html>

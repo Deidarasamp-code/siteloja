@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - ARKAZ</title>
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-box {
+      background: #222;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      width: 300px;
+      text-align: center;
+    }
+    .login-box h2 {
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border: none;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #4caf50;
+      border: none;
+      color: white;
+      cursor: pointer;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    .msg {
+      font-size: 0.9em;
+      color: #f55;
+      margin-top: 10px;
+      min-height: 20px;
+    }
+    .switch {
+      margin-top: 10px;
+      font-size: 0.9em;
+      cursor: pointer;
+      color: #aaa;
+    }
+    .switch:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-box">
+    <h2 id="titulo">Login</h2>
+
+    <input type="text" id="nome" placeholder="Seu nome">
+    <input type="email" id="email" placeholder="Seu e-mail">
+    <input type="password" id="senha" placeholder="Sua senha">
+
+    <button onclick="entrar()" id="btnLogin">Entrar</button>
+    <button onclick="registrar()" id="btnRegistro" style="display:none; background:#555;">Cadastrar</button>
+
+    <div class="switch" onclick="alternarModo()">Trocar para Cadastro/Login</div>
+    <div class="msg" id="mensagem"></div>
+  </div>
+
+  <script>
+    let modoLogin = true;
+
+    function alternarModo() {
+      modoLogin = !modoLogin;
+      document.getElementById('titulo').textContent = modoLogin ? 'Login' : 'Cadastro';
+      document.getElementById('btnLogin').style.display = modoLogin ? 'inline-block' : 'none';
+      document.getElementById('btnRegistro').style.display = modoLogin ? 'none' : 'inline-block';
+      document.getElementById('mensagem').textContent = '';
+    }
+
+    function entrar() {
+      const nome = document.getElementById('nome').value.trim();
+      const senha = document.getElementById('senha').value.trim();
+
+      if (!nome || !senha) {
+        exibirMsg("Preencha nome e senha.");
+        return;
+      }
+
+      const contas = JSON.parse(localStorage.getItem('contasARKAZ')) || [];
+      const usuario = contas.find(c => c.nome === nome && c.senha === senha);
+
+      if (usuario) {
+        localStorage.setItem('usuarioLogadoARKAZ', JSON.stringify(usuario));
+        window.location.href = 'ultimatentativa.html';
+      } else {
+        exibirMsg("Usuário ou senha inválidos.");
+      }
+    }
+
+    function registrar() {
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('senha').value.trim();
+
+      if (!nome || !email || !senha) {
+        exibirMsg("Preencha todos os campos.");
+        return;
+      }
+
+      const contas = JSON.parse(localStorage.getItem('contasARKAZ')) || [];
+
+      if (contas.some(c => c.nome === nome)) {
+        exibirMsg("Nome de usuário já em uso.");
+        return;
+      }
+
+      contas.push({ nome, email, senha });
+      localStorage.setItem('contasARKAZ', JSON.stringify(contas));
+      exibirMsg("Conta criada com sucesso! Faça login.");
+      alternarModo();
+    }
+
+    function exibirMsg(msg) {
+      document.getElementById('mensagem').textContent = msg;
+    }
+  </script>
+
+</body>
+</html>

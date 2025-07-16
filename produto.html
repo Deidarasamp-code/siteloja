@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produto - ARKAZ</title>
+  <link rel="shortcut icon" href="favlogo.png" type="image/png">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #111;
+      color: white;
+    }
+
+    header {
+      background-color: #000;
+      text-align: center;
+      padding: 20px;
+    }
+
+    header img {
+      height: 80px;
+    }
+
+    .produto-container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .produto-container img {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+
+    .produto-container h2 {
+      margin-top: 20px;
+    }
+
+    .button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #4caf50;
+      border: none;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .button:hover {
+      background: #45a049;
+    }
+
+    footer {
+      background-color: #000;
+      text-align: center;
+      padding: 20px;
+      color: #aaa;
+      font-size: 0.9em;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html"><img src="logoadobe1.png" alt="ARKAZ Logo"></a>
+  </header>
+
+  <div class="produto-container">
+    <img id="imagem-produto" src="EUDECOSTA.jpg" alt="Produto">
+    <h2 id="nome-produto">Nome do Produto</h2>
+    <p id="preco-produto">R$ 0,00</p>
+    <button class="button" onclick="adicionarAoCarrinho()">Adicionar ao Carrinho</button>
+  </div>
+
+  <!-- Botão e carrinho -->
+  <button onclick="document.getElementById('carrinho').style.display='block'" style="position:fixed;bottom:20px;right:20px;background:#4caf50;color:white;padding:10px 15px;border:none;border-radius:50%;">🛒</button>
+  <div id="carrinho" style="background:#222; padding:10px; color:white; text-align:center; display:none;">
+    <h3>🛒 Carrinho</h3>
+    <ul id="lista-carrinho"></ul>
+    <p>Total: R$ <span id="total-carrinho">0.00</span></p>
+    <button onclick="fecharCarrinho()" class="button" style="width:auto;">Fechar Carrinho</button>
+  </div>
+
+  <footer>
+    &copy; 2025 ARKAZ Streetwear. Todos os direitos reservados.
+  </footer>
+
+  <script>
+    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+
+    function adicionarAoCarrinho() {
+      const nome = document.getElementById('nome-produto').innerText;
+      const precoTexto = document.getElementById('preco-produto').innerText;
+      const preco = parseFloat(precoTexto.replace('R$', '').replace(',', '.'));
+      carrinho.push({ nome, preco });
+      localStorage.setItem('carrinho', JSON.stringify(carrinho));
+      atualizarCarrinho();
+      document.getElementById('carrinho').style.display = 'block';
+    }
+
+    function atualizarCarrinho() {
+      const lista = document.getElementById('lista-carrinho');
+      const total = document.getElementById('total-carrinho');
+      if (!lista || !total) return;
+
+      lista.innerHTML = '';
+      let soma = 0;
+      carrinho.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `${item.nome} - R$ ${item.preco.toFixed(2)} 
+          <button onclick="removerItem(${index})" style="margin-left:10px;">❌</button>`;
+        lista.appendChild(li);
+        soma += item.preco;
+      });
+      total.innerText = soma.toFixed(2);
+    }
+
+    function removerItem(index) {
+      carrinho.splice(index, 1);
+      localStorage.setItem('carrinho', JSON.stringify(carrinho));
+      atualizarCarrinho();
+    }
+
+    function fecharCarrinho() {
+      document.getElementById('carrinho').style.display = 'none';
+    }
+
+    function carregarProduto() {
+      const params = new URLSearchParams(window.location.search);
+      const nome = params.get('nome');
+      const preco = params.get('preco');
+      const imagem = params.get('imagem');
+
+      if (nome && preco && imagem) {
+        document.getElementById('nome-produto').innerText = nome;
+        document.getElementById('preco-produto').innerText = `R$ ${parseFloat(preco).toFixed(2)}`;
+        document.getElementById('imagem-produto').src = imagem;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      carregarProduto();
+      atualizarCarrinho();
+    });
+  </script>
+  <a href="ultimatentativa.html">← Voltar à Loja</a>
+
+</body>
+</html>
